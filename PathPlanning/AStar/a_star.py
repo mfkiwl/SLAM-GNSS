@@ -7,8 +7,8 @@ author: Atsushi Sakai(@Atsushi_twi)
 
 See Wikipedia article (https://en.wikipedia.org/wiki/A*_search_algorithm)
 
-weisong wen
-"""
+weisong wen: weisongjgj
+"""  
 
 import math
 
