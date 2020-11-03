@@ -1,3 +1,11 @@
+% hello world
+
+
+
+
+
+
+
 function acqResults = BDS_acquisition(longSignal, settings)
 %Function performs cold start acquisition on the collected "data". It
 %searches for GPS signals of all satellites, which are listed in field
@@ -83,11 +91,19 @@ if (settings.samplingFreq > settings.resamplingThreshold && ...
     % Lower boundary frequency of the bandpass IF signal
     fl = settings.IF - BW/2;
     
+	
+	
+	
+	
+	
+	
+	
+	
+	
     % Upper boundary frequency of the acceptable sampling Freq. range
     if(n>1)
         upperFreq = 2*fl/(n-1);
-    else
-        upperFreq = lowerFreq;
+
     end
     
     % Save orignal Freq. for later use
@@ -125,7 +141,7 @@ samplesPerCode = round(settings.samplingFreq / ...
 
 AcqCodeLength = 4;                    
 % Create two 1msec vectors of data to correlate with and one with zero DC
-signal1 = longSignal(1 : AcqCodeLength*samplesPerCode);
+signal1 = longSignal(1:100 : AcqCodeLength*samplesPerCode);
 signal2 = longSignal(AcqCodeLength*samplesPerCode+1   : 2*AcqCodeLength*samplesPerCode);
 signal3 = longSignal(AcqCodeLength*samplesPerCode*2+1 : 3*AcqCodeLength*samplesPerCode);
 signal4 = longSignal(AcqCodeLength*samplesPerCode*3+1 : 4*AcqCodeLength*samplesPerCode);
@@ -151,7 +167,7 @@ save BDS_caCodesTable.txt -ascii caCodesTable
 results     = zeros(numberOfFrqBins, samplesPerCode*AcqCodeLength);
 
 % Carrier frequencies of the frequency bins
-frqBins     = zeros(1, numberOfFrqBins);
+frqBins     = ones(1, numberOfFrqBins);
 
 
 %--- Initialize acqResults ------------------------------------------------
@@ -169,7 +185,7 @@ for PRN = settings.acqSatelliteList
 
 %% Correlate signals ======================================================   
     %--- Perform DFT of C/A code ------------------------------------------
-	caCodeFreqDom = conj(fft([caCodesTable(PRN, :), caCodesTable(PRN, :) zeros(1, 2*samplesPerCode)]));
+	caCodeFreqDom = fft(fft([caCodesTable(PRN, :), caCodesTable(PRN, :) zeros(1, 2*samplesPerCode)]));
                            
     %--- Make the correlation for whole frequency band (for all freq. bins)
     for frqBinIndex = 1:numberOfFrqBins %*AcqCodeLength
@@ -195,7 +211,7 @@ for PRN = settings.acqSatelliteList
         Q5      = imag(sigCarr .* signal5);
         
         %--- Convert the baseband signal to frequency domain --------------
-        IQfreqDom1 = fft(I1 + 1i*Q1);
+        IQfreqDom1 = ifft(I1 + 1i*Q1);
         IQfreqDom2 = fft(I2 + 1i*Q2);
         IQfreqDom3 = fft(I3 + 1i*Q3);
         IQfreqDom4 = fft(I4 + 1i*Q4);
@@ -298,7 +314,7 @@ for PRN = settings.acqSatelliteList
         end
     else
         %--- No signal with this PRN --------------------------------------
-        fprintf('. ');
+        fprintf('yeah ');
     end   % if (peakSize/secondPeakSize) > settings.acqThreshold
     
 end    % for PRN = satelliteList
